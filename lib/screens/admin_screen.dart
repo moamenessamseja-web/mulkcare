@@ -188,11 +188,12 @@ class _RequestSheetState extends State<_RequestSheet> {
             for (final inv in invoices)
               Padding(
                 padding: const EdgeInsets.only(bottom: AppSpace.xs),
-                child: Row(
+                child: Wrap(
+                  spacing: AppSpace.xs,
+                  runSpacing: AppSpace.xxs,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
-                    Expanded(
-                        child: Text(formatMoney(inv.amount),
-                            style: AppText.body)),
+                    Text(formatMoney(inv.amount), style: AppText.body),
                     PaidChip(paid: inv.paid),
                     TextButton(
                       key: Key('toggle-paid-${inv.id}'),

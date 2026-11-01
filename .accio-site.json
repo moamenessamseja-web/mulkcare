@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "siteId": "ghirzdvog2k0vr1y",
+  "name": "mulkcare",
+  "kind": "react-vite",
+  "devCommand": "vite",
+  "buildCommand": "vite build",
+  "outputDir": "dist",
+  "entry": "index.html",
+  "createdBy": "accio-site-builder",
+  "createdAt": "2026-10-09T19:16:29.513Z",
+  "siteIdSyncStatus": "synced",
+  "installedAt": "2026-10-11T22:59:28.440Z",
+  "databaseUrl": ""
+}

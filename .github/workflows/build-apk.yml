@@ -1,0 +1,111 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ 'feature/**' ]
+    paths-ignore:
+      - '.agent/**'
+      - '**/*.md'
+      - 'src/**'
+      - 'public/**'
+      - 'cdn-assets/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          # Pinned: same toolchain as manager-assistant-ready build #81 (green, device-confirmed
+          # there). Unpinned 'stable' once silently changed plugin resolution and broke an app.
+          # Bump deliberately, with a device test.
+          flutter-version: '3.47.7'
+          channel: 'stable'
+
+      - name: Toolchain fingerprint (recorded in the release notes)
+        run: |
+          flutter --version 2>&1 | tee toolchain.txt
+
+      - name: Generate android/ scaffold (android/ is never committed)
+        run: |
+          if [ ! -d "android" ]; then
+            # org "com" + project name "mullky" => applicationId "com.mullky" (owner's ID: mullky)
+            flutter create --platforms=android --org com --project-name mullky .
+          fi
+          # flutter create writes a placeholder test that references a non-existent MyApp.
+          rm -f test/widget_test.dart
+
+      - name: Guard - applicationId must be com.mullky (owner gate)
+        run: |
+          f=$(ls android/app/build.gradle.kts android/app/build.gradle 2>/dev/null | head -1)
+          echo "checking $f"
+          grep -n 'applicationId' "$f"
+          grep -Eq 'applicationId[ =]*"com\.mullky"' "$f"
+
+      - name: Android manifest - INTERNET permission and app label
+        run: |
+          MANIFEST="android/app/src/main/AndroidManifest.xml"
+          if ! grep -q 'android.permission.INTERNET' "$MANIFEST"; then
+            sed -i '/<manifest /a\    <uses-permission android:name="android.permission.INTERNET" />' "$MANIFEST"
+          fi
+          sed -i 's/android:label="mullky"/android:label="MulkCare"/' "$MANIFEST"
+          echo "---- AndroidManifest.xml ----"
+          cat "$MANIFEST"
+
+      - run: flutter pub get
+
+      - name: Static analysis (flutter analyze)
+        run: |
+          set -o pipefail
+          # --no-fatal-infos: fail on errors/warnings, not style-only infos.
+          flutter analyze --no-fatal-infos 2>&1 | tee build_log.txt
+
+      - name: Run tests
+        run: |
+          set -o pipefail
+          flutter test 2>&1 | tee -a build_log.txt
+
+      - name: Build APK
+        run: |
+          set -o pipefail
+          flutter build apk --release --build-number=${{ github.run_number }} 2>&1 | tee -a build_log.txt
+
+      - name: Create pre-release with APK
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="build-${{ github.run_number }}"
+          gh release create "$TAG" \
+            "build/app/outputs/flutter-apk/app-release.apk" \
+            --prerelease \
+            --target "${{ github.sha }}" \
+            --title "MulkCare (mullky) APK build #${{ github.run_number }}" \
+            --notes "Automated build from commit ${{ github.sha }} (branch ${{ github.ref_name }}). NOT device-tested. Signed with Flutter's default debug key (no release signing configured).
+
+          Toolchain:
+          $(cat toolchain.txt)"
+
+      - name: Upload build log on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="debug-${{ github.run_number }}"
+          tail -n 500 build_log.txt > build_log_tail.txt || echo "no log" > build_log_tail.txt
+          gh release create "$TAG" \
+            "build_log_tail.txt" \
+            --prerelease \
+            --target "${{ github.sha }}" \
+            --title "Build FAILED log #${{ github.run_number }}" \
+            --notes "Automated failure log from commit ${{ github.sha }} (branch ${{ github.ref_name }})"

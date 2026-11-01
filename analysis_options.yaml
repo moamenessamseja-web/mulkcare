@@ -1,0 +1,5 @@
+# Intentionally minimal: no flutter_lints include (keeps dependency set to SDK-only
+# packages for the first build). Add lints deliberately later.
+analyzer:
+  exclude:
+    - build/**

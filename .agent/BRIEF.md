@@ -3,6 +3,50 @@
 > Owner: Moamen. Writes Arabic; phone-only (no computer); wants short, honest, structured reports; hates false "done" claims.
 > Sections 1 and 2 below are **verbatim copies** (unedited) of the two owner documents. Do not summarize or "fix" them here.
 
+## 2026-11-01 — (3) Owner's second message, verbatim (`to sonnet 2 mullky.md`) — NEWEST, narrows the MVP
+
+دائما اقع ف نفس الخطأ ألجأ لاحدهم ليكتب المطالبة بالإنجليزية ويقوم بالهلوسة.
+بص انا وجدت ان المشروع أوسع من اللازم لذلك قررت ان اجعل ال mvp الاول بسيط ثم بعد التأسيس ننظر في phase 2, 3
+
+الحلقة الأساسية الوحيدة اللي بتعمل فلوس: العميل → الوحدة → طلب صيانة/تنظيف → صور قبل/بعد → حالة → فاتورة. أي حاجة بره دي = مرحلة تانية.
+ 
+اللي تقطعه دلوقتي (Phase 2+)
+الحاجة ليه بنقطعها
+موقع إلكتروني + داش بورد ❌ 
+عمل أدمن داخل التطبيق بنفسه (فلان  is_admin ) — كفاية لحد ما يزيد العملاء 
+API مكتوب يدوياً + سيرفر ❌ 
+استخدم Supabase (Postgres + Auth + Storage للصور + Realtime) — مجاني، من غير كود سيرفر، تظبطه من المتصفح على الموبايل 
+*قاعدة بيانات المدينة (صيدليات/عيادات/مطاعم) تشتيت — الدليل المحلي مش بيعمل فلوس.❌ Phase 3 
+*المساعد الذكي + الاشتراكات❌ Phase 2 
+العمال + الصناعي + عملاء متعددين بعمق ❌ 
+خلّي العميل = صاحب العقار، والوحدة = الفيلا/الشاليه. العمال = Phase 2 
+دفع أونلاين ❌ 
+سجّل الفاتورة وحدّدها مدفوعة/غير مدفوعة فقط 
+ 
+اللي تبقي (MVP — 5 شاشات بس)
+ 
+1. تسجيل دخول (Supabase Auth)
+​
+2. الرئيسية: قائمة الوحدات (فيلا/شاليه + صورة + حالة: شاغرة/مؤجرة)
+​
+3. تفاصيل الوحدة: سجل كل الطلبات + الصور + الفواتير
+​
+4. طلب خدمة: نوع (تنظيف/صيانة/فحص/مكافحة) + ملاحظات + صور → حالة (قيد الانتظار/جاري/مكتمل)
+​
+5. أدمن (داخل التطبيق): كل الطلبات، تغيير الحالة، إضافة فاتورة
+ 
+التخزين:  محلي (offline) اما sync لـ Supabase. الصور → Supabase Storage فخليها phase 2
+
+الان الصورة تقريبا واضحة، انا عملت التطبيق ولقيته كبير عليا مرة واحدة فقررت اقسمه علي مراحل، ولن استعين بأحد للترجمة مني إليك سأتعامل باللغة البيضاء البسيطة معك مباشرة.
+لا داعي لفحص كافة مشروع manger assistant ready, بالكامل لديك بالفعل هيكلية فولدر. agent, خد ما تحتاجه فقط لانشاء اول apk, وانشأ ملفات. agent علي نفس النمط مع تطوير البريف وفقا لما فهمته
+
+**Engineering reading of (3) (mine, not the owner's):**
+- MVP is cut to 5 screens: login, home (units), unit detail (history + invoices), service request, in-app admin. The only money-making loop: client -> unit -> request -> before/after photos -> status -> invoice.
+- Cut: website + dashboard, hand-written API/server (Supabase only), city database, AI assistant + subscriptions (Phase 2), local guide (Phase 3), workers/industrial/multi-client, online payment (invoice = paid/unpaid only).
+- Storage: local offline first, then sync to Supabase. "Photos -> Supabase Storage: make it Phase 2" = my reading: photos are picked/kept LOCALLY in the MVP; uploading them to Supabase Storage is Phase 2. (Open decision in DECISIONS.md.)
+- Working style: the owner talks to me directly in plain Arabic, no English prompt-writing by other models; do NOT inspect all of manager-assistant-ready, take only what is needed for the first APK; .agent/ in the same pattern.
+- Chat instructions: "ثبت flutter, و CI, ال ID mullky" -> pin Flutter, CI, application id `mullky`.
+
 ## 2026-11-01 — (1) Owner's brief, verbatim (`Brief 1 mulkcare .md`)
 
 # BRIEF — MulkCare (owner's brief)

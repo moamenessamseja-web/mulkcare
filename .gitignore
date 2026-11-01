@@ -5,3 +5,15 @@ dist
 .env.local
 .env.*.local
 .DS_Store
+
+# Flutter / Dart (android/ is generated in CI by `flutter create`, never committed)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+/android/
+/ios/
+pubspec.lock
+*.apk
+*.log

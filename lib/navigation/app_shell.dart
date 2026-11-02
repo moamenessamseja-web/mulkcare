@@ -75,25 +75,21 @@ class AppShell extends StatelessWidget {
           const SizedBox(width: AppSpace.xs),
         ],
       ),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: AppSpace.appColumnMax),
-          child: Column(children: [
-            const DemoBanner(),
-            Expanded(child: child),
-          ]),
-        ),
+      body: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: AppSpace.appColumnMax),
+        child: Column(children: [
+          const DemoBanner(),
+          Expanded(child: child),
+        ]),
       ),
       bottomNavigationBar: SizedBox(
         height: 80,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: AppSpace.appColumnMax),
-            child: NavigationBar(
-              selectedIndex: selected,
-              onDestinationSelected: (index) => Navigator.of(context).pushNamedAndRemoveUntil(_destinations[index].route, (route) => false),
-              destinations: _destinations.map((item) => NavigationDestination(icon: Icon(item.icon), selectedIcon: Icon(item.icon), label: state.tr(item.key))).toList(),
-            ),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: AppSpace.appColumnMax),
+          child: NavigationBar(
+            selectedIndex: selected,
+            onDestinationSelected: (index) => Navigator.of(context).pushNamedAndRemoveUntil(_destinations[index].route, (route) => false),
+            destinations: _destinations.map((item) => NavigationDestination(icon: Icon(item.icon), selectedIcon: Icon(item.icon), label: state.tr(item.key))).toList(),
           ),
         ),
       ),

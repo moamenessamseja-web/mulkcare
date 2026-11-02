@@ -407,20 +407,22 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
               ),
               const SizedBox(width: AppSpace.sm),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    state.tr('meta.appName'),
-                    style: theme.textTheme.headlineMedium?.copyWith(
-                      color: AppColors.primary,
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      state.tr('meta.appName'),
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        color: AppColors.primary,
+                      ),
                     ),
-                  ),
-                  Text(
-                    state.tr('meta.tagline'),
-                    style: theme.textTheme.bodySmall,
-                  ),
-                ],
+                    Text(
+                      state.tr('meta.tagline'),
+                      style: theme.textTheme.bodySmall,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

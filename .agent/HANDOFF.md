@@ -1,9 +1,7 @@
-# نقطة التسليم — ابدأ من هنا
+# نقطة التسليم — الحالة مكتملة
 
-اقرأ `.agent/README.md` ثم `Implementation_Plan_and_Development_Instructions.md`, `IMPLEMENTATION_STATE.md`, `implementation.md`, و`VERIFICATION_REPORT.md`.
+اقرأ `.agent/README.md` ثم `IMPLEMENTATION_STATE.md`, `implementation.md`, `VERIFICATION_REPORT.md`, و`TODO.md`.
 
-الفرع `feature/flutter-migration-complete` مبني من `main`، ويحمل commit `509de17` مع lockfile. Actions run 4 (الرابط في `IMPLEMENTATION_STATE.md`) مرّر analyzer، ومرّت 13/17 الاختبارات؛ الأربع المتبقية فشلت لأن بيانات Intl لم تُهيأ قبل DateFormat. أضيفت تهيئة `ar` و`en` في bootstrap وsetup smoke tests إلى شجرة العمل الحالية، لكن التعديل لم يُدفع.
+الفرع المستقل هو `feature/flutter-migration-complete`، وآخر commit برمجي `fcbaa5d`. نجح [GitHub Actions run 5](https://github.com/moamenessamseja-web/mulkcare/actions/runs/41397422327): analyzer، 17 اختبارًا، release APK ورفع artifact. artifact اسمه `MulkCare-APK-5`، والنسخة المنزلة توجد في `/home/ubuntu/mulkcare-output/MulkCare-release.apk`؛ SHA-256 والحجم موثقان في سجل الحالة.
 
-الخطوة التالية: فحص `git diff --check`، commit إصلاح Intl، ثم push. تابع run 5 بواسطة GitHub API. إذا اجتاز الاختبارات، دع workflow يكمل `flutter build apk --release` وينزل artifact. عالج أي فشل عبر commit ثم Actions؛ لا تشغّل Flutter محليًا.
-
-لا تدمج `main` ولا تغيّر `com.mullky`. لا يوجد اختبار جهاز فعلي أو توقيع إنتاجي أو نشر Play.
+لا يلزم عمل آخر لإنجاز المطلوب. الاختيار اللاحق إن أراد المالك: اختبار تثبيت على جهاز حقيقي، ثم إعداد keystore إنتاجي قبل أي نشر إلى Google Play. لا تدمج إلى `main` دون طلب، ولا تشغل Flutter محليًا في هذا الإعداد.

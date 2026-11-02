@@ -276,7 +276,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                 const SizedBox(height: AppSpace.md),
               ],
               DropdownButtonFormField<String>(
-                value: _propertyId,
+                initialValue: _propertyId,
                 isExpanded: true,
                 decoration: InputDecoration(
                   labelText: state.tr('services.property'),
@@ -298,7 +298,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
               ),
               const SizedBox(height: AppSpace.md),
               DropdownButtonFormField<String>(
-                value: _category,
+                initialValue: _category,
                 isExpanded: true,
                 decoration: InputDecoration(
                   labelText: state.tr('services.category'),

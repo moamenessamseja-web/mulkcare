@@ -1,9 +1,9 @@
 # نقطة التسليم — ابدأ من هنا
 
-اقرأ `.agent/README.md` ثم `Implementation_Plan_and_Development_Instructions.md`, `IMPLEMENTATION_STATE.md`, `implementation.md`, `TODO.md`.
+اقرأ `.agent/README.md` ثم `Implementation_Plan_and_Development_Instructions.md`, `IMPLEMENTATION_STATE.md`, `implementation.md`, `VERIFICATION_REPORT.md`, و`TODO.md`.
 
-الفرع الحالي `feature/flutter-migration-complete` مبني من `main` عند `b428a8d`. توجد ملفات Flutter لكل الشاشات الإحدى عشرة، لكن Flutter analyzer والاختبارات وبناء APK لم تُشغّل بعد. لا يوجد Flutter SDK أو Android SDK في sandbox؛ كل هذه الخطوات تتم عبر GitHub Actions كما طلب المالك.
+الفرع المستقل `feature/flutter-migration-complete` مبني من `main` عند `b428a8d`. أول commit هو `2e219a5`. جميع الشاشات الإحدى عشرة مكتوبة. شغّل GitHub Actions رقم 3 وفشل analyzer بسبب قوس إغلاق مفقود في `main.dart` وثلاثة أقواس في `property_details_screen.dart`. عولجت الأخطاء وأضيف lockfile الناتج من Actions إلى شجرة العمل، لكن التصحيحات لم تُدفع أو تتحقق بعد.
 
-الخطوة المباشرة: نفّذ مراجعة `git diff --check` ثم commit آمنًا على هذا الفرع وارفعه باستخدام جلسة GitHub CLI الموجودة، وبعدها تحقق من workflow run عبر `gh`/GitHub API. لا تقل للمستخدم أن يبني أو يجرب محليًا. عالج أخطاء analyzer/tests عبر commits على نفس الفرع. عند نجاح `flutter pub get`، نزّل artifact `MulkCare-pubspec-lock-<run>`، أضف `pubspec.lock` إلى commit، ثم شغّل Actions مرة أخرى ليكون الـAPK النهائي مبنيًا من lockfile ثابت.
+الخطوة المباشرة: افحص `git diff --check`، stage التعديلات و`pubspec.lock`، أنشئ commit على الفرع نفسه وادفعه. تابع تشغيل Actions الجديد عبر GitHub API. يجب أن يمر analyzer ثم الاختبارات السبعة عشر ثم APK قبل التنزيل أو الادعاء بالنجاح. عالج أي فشل في commit جديد، ولا تشغل Flutter محليًا ولا تطلب من المستخدم ذلك.
 
-سجّل SHA والنتيجة ورابط artifacts في `IMPLEMENTATION_STATE.md` و`VERIFICATION_REPORT.md`. نجاح CI لا يساوي اختبار هاتف؛ لا تذكر تجربة جهاز لم تحدث. لا تدمج `main`، ولا تبدل `com.mullky` أو التوقيع أو إعداد Play.
+لا تدمج إلى `main`، ولا تغيّر `com.mullky`. لا يوجد اختبار جهاز فعلي أو توقيع إنتاجي أو نشر Play.

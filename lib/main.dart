@@ -49,9 +49,10 @@ class MulkCareApp extends StatelessWidget {
                 ? const _RouteScreen(routeName: '/', child: HomeScreen())
                 : const AuthScreen(),
             onGenerateRoute: (settings) => _route(state, settings.name ?? '/'),
+            ),
           ),
-        ),
-      );
+        );
+}
 
 Route<dynamic> _route(AppState state, String routeName) {
   if (routeName == '/auth') return MaterialPageRoute<void>(builder: (_) => const AuthScreen(), settings: RouteSettings(name: routeName));

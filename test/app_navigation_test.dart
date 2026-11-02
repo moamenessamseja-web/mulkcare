@@ -60,6 +60,11 @@ void main() {
   });
 
   testWidgets('successful registration also leaves authentication for the app', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     final translations = await AppTranslations.load();
     final state = await AppState.create(translations);
     addTearDown(state.dispose);

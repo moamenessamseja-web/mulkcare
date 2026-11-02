@@ -38,16 +38,24 @@ void main() {
 
   for (final screen in _screens) {
     testWidgets('${screen.name} screen builds without an exception', (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
       SharedPreferences.setMockInitialValues({});
       final state = await AppState.create(AppTranslations(ar: const {}, en: const {}));
       expect(state.signIn(identity: 'owner@mulkcare.demo', password: 'demo123'), isNull);
-      await tester.pumpWidget(AppScope(
-        state: state,
-        child: MaterialApp(
-          theme: buildTheme(),
-          home: screen.route == '/auth'
-              ? screen.page
-              : AppShell(routeName: screen.route, child: screen.page),
+      await tester.pumpWidget(MediaQuery(
+        data: MediaQueryData(size: const Size(390, 844)),
+        child: AppScope(
+          state: state,
+          child: MaterialApp(
+            theme: buildTheme(),
+            home: screen.route == '/auth'
+                ? screen.page
+                : AppShell(routeName: screen.route, child: screen.page),
+          ),
         ),
       ));
       await tester.pumpAndSettle();

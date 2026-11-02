@@ -1,0 +1,5 @@
+# Android APK workflow
+
+`build-apk.yml` runs on `feature/flutter-migration-complete` pushes or a manual dispatch. It pins Flutter 3.47.7, generates the Android scaffold on the GitHub runner (the sandbox does not contain Flutter/Android SDK or a tracked `android/` directory), verifies the retained package ID `com.mullky`, resolves dependencies, analyzes, tests, and builds a release APK.
+
+On success, GitHub Actions stores the APK artifact for 14 days and also stores the exact `pubspec.lock` generated for that run as a separate 14-day artifact so it can be committed for reproducible future builds. On failure, it stores diagnostic logs when available. The workflow does not create a public GitHub Release, use an upload key, or publish to Google Play. A green build is not a substitute for installing the APK on a physical Android device.

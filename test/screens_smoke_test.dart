@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mulkcare/core/format.dart';
 import 'package:mulkcare/core/i18n.dart';
 import 'package:mulkcare/design/theme.dart';
 import 'package:mulkcare/navigation/app_shell.dart';
@@ -33,6 +34,7 @@ const _screens = <({String name, String route, Widget page})>[
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  setUpAll(initializeAppDateFormatting);
 
   for (final screen in _screens) {
     testWidgets('${screen.name} screen builds without an exception', (tester) async {

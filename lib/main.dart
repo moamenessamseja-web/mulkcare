@@ -20,6 +20,7 @@ import 'state/app_state.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   initializeAppTimeZone();
+  await initializeAppDateFormatting();
   final translations = await AppTranslations.load();
   final state = await AppState.create(translations);
   runApp(MulkCareApp(state: state));

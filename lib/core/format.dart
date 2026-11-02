@@ -1,8 +1,10 @@
+import 'package:intl/date_symbol_data_local.dart' as date_data;
 import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz_data;
 import 'package:timezone/timezone.dart' as tz;
 
 bool _timeZoneInitialized = false;
+bool _dateFormattingInitialized = false;
 
 void initializeAppTimeZone() {
   if (_timeZoneInitialized) return;
@@ -13,6 +15,15 @@ void initializeAppTimeZone() {
 
 void _ensureTimeZone() {
   if (!_timeZoneInitialized) initializeAppTimeZone();
+}
+
+Future<void> initializeAppDateFormatting() async {
+  if (_dateFormattingInitialized) return;
+  await Future.wait([
+    date_data.initializeDateFormatting('ar'),
+    date_data.initializeDateFormatting('en'),
+  ]);
+  _dateFormattingInitialized = true;
 }
 
 DateTime cairoNow() {

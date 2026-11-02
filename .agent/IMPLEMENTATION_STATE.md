@@ -2,27 +2,29 @@
 
 ## الأساس والفرع
 
-المستودع `moamenessamseja-web/mulkcare`. الفرع `feature/flutter-migration-complete` مبني من `main` عند `b428a8d32c45780e7c72fe818df00125ceac4770`؛ لم يُعدّل `main`. أول commit: `2e219a53e90836d0a4b6f88b1fb43c16ea8234b7` (`Port MulkCare screens to Flutter`).
+المستودع `moamenessamseja-web/mulkcare`، والفرع المستقل `feature/flutter-migration-complete` مبني من `main` عند `b428a8d32c45780e7c72fe818df00125ceac4770`. بقي `main` دون تعديل. آخر commit مرفوع: `509de17a2e025cda7e50d2b4ad00c3a590e938cd` (`Fix Flutter analysis and lock dependencies`). يحتوي الفرع `pubspec.lock` الذي أنتجه GitHub runner الأول.
 
-## المنجز
+## التنفيذ
 
-أُضيفت بنية Flutter كاملة وملفات منفصلة للشاشات الإحدى عشرة، مع الأصول الأصلية (3 خطوط Tajawal و8 صور) والقواميس العربية والإنجليزية، وحالة وبيانات محلية. أُعدّت 6 اختبارات حالة و11 اختبار widget. أُضيف توقيت `Africa/Cairo` باستخدام حزمة timezone مع حساب تقويمي يحافظ على الساعة المحلية عبر DST.
+توجد بنية Flutter وملفات منفصلة لكل الشاشات الإحدى عشرة. نُقلت 3 خطوط Tajawal و8 صور وقواميس العربية والإنجليزية الأصلية. توجد حالة وبيانات محلية، GitHub Actions ببناء Android داخل runner، و17 اختبارًا (6 للحالة و11 لرسم الشاشات). التوقيت يستخدم `Africa/Cairo` والحسابات التقويمية الصريحة.
 
 ## الفحوص الساكنة
 
-397 مفتاحًا متطابقًا في كل قاموس؛ 266 استدعاء ترجمة حرفيًا بلا مفاتيح ناقصة؛ جميع ملفات المسارات الإحدى عشرة والأصول الثماني موجودة. فحص `git diff --check` ناجح، ولم يُعثر على نمط token في الملفات الملتزمة. هذه ليست نتائج Flutter analyzer أو tests.
+- القواميس متطابقة: 397 مفتاحًا لكل لغة.
+- 266 استدعاء ترجمة حرفيًا؛ لم توجد مفاتيح مفقودة.
+- كل الشاشات والمسارات الأحد عشر والصور الثماني موجودة.
+- لا token GitHub في ملفات المستودع.
 
-## تشغيل Actions الأول
+## تشغيل Actions 3
 
-- Run `3`، commit `2e219a53e90836d0a4b6f88b1fb43c16ea8234b7`.
-- الرابط: https://github.com/moamenessamseja-web/mulkcare/actions/runs/41396762658
-- نجحت خطوات تثبيت Flutter `3.47.7`، وتوليد Android scaffold، وحل الاعتماديات ورفع lockfile.
-- فشل `flutter analyze` بسبب قوس إغلاق مفقود لصنف التطبيق وثلاثة أقواس إغلاق `SurfaceCard` في تفاصيل العقار. لم تُشغّل الاختبارات أو بناء APK.
+الرابط: https://github.com/moamenessamseja-web/mulkcare/actions/runs/41396762658 . نجحت تهيئة Flutter `3.47.7` وAndroid و`pub get` ورفع lockfile. فشل analyzer بسبب قوس إغلاق ناقص في `main.dart` وثلاثة أقواس في تفاصيل العقار، ولم تصل الخطوات للاختبارات أو APK. أُصلحت الأخطاء وأُضيف lockfile في commit `509de17`.
 
-## الإصلاح الجاري
+## تشغيل Actions 4
 
-صُححت الأقواس، وعُدلت حقول Dropdown إلى `initialValue`. نُزّل `MulkCare-pubspec-lock-3`، وأُضيف `pubspec.lock` نفسه إلى شجرة العمل. هذه التصحيحات لم تُدفع بعد ولم تتحقق عبر analyzer. commit التالي سيطلق Actions جديدًا على lockfile ثابت.
+الرابط: https://github.com/moamenessamseja-web/mulkcare/actions/runs/41397097527 . نجح `flutter analyze`، ونجحت 13 من 17 الاختبارات. فشلت أربع شاشات (تفاصيل العقار، تقرير الفحص، الاشتراكات، الملف الشخصي) بسبب عدم تهيئة بيانات تواريخ Intl العربية/الإنجليزية؛ لم يُبنَ APK.
 
-## القيود
+## الإصلاح الحالي غير المرفوع
 
-كل تحليل/اختبار/بناء Flutter يتم عبر GitHub Actions فقط؛ لا يوجد SDK محلي. لم يُختبر التطبيق على هاتف فعلي. لا توقيع إنتاجي ولا إعداد Google Play.
+أضيفت `initializeAppDateFormatting()` باستخدام `intl/date_symbol_data_local.dart`، مع استدعائها في bootstrap وفي `setUpAll` لاختبارات الشاشات. لم تُدفع هذه التغييرات ولم تُتحقق بعد. الخطوة التالية commit على الفرع نفسه، ثم مراقبة Actions run 5 ومعالجة أي فشل حتى نجاح analyzer والاختبارات وبناء APK.
+
+كل Flutter validation يتم عبر GitHub Actions فقط؛ لم يُجر اختبار على جهاز Android فعلي، ولا يوجد توقيع إنتاجي أو نشر Play.

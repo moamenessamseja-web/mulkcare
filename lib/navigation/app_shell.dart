@@ -84,13 +84,16 @@ class AppShell extends StatelessWidget {
           ]),
         ),
       ),
-      bottomNavigationBar: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: AppSpace.appColumnMax),
-          child: NavigationBar(
-            selectedIndex: selected,
-            onDestinationSelected: (index) => Navigator.of(context).pushNamedAndRemoveUntil(_destinations[index].route, (route) => false),
-            destinations: _destinations.map((item) => NavigationDestination(icon: Icon(item.icon), selectedIcon: Icon(item.icon), label: state.tr(item.key))).toList(),
+      bottomNavigationBar: SizedBox(
+        height: 80,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: AppSpace.appColumnMax),
+            child: NavigationBar(
+              selectedIndex: selected,
+              onDestinationSelected: (index) => Navigator.of(context).pushNamedAndRemoveUntil(_destinations[index].route, (route) => false),
+              destinations: _destinations.map((item) => NavigationDestination(icon: Icon(item.icon), selectedIcon: Icon(item.icon), label: state.tr(item.key))).toList(),
+            ),
           ),
         ),
       ),

@@ -154,6 +154,7 @@ class _AuthScreenState extends State<AuthScreen> {
       return;
     }
     _showMessage(state.tr('auth.successLogin'));
+    Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
   }
 
   Future<void> _submitRegistration() async {
@@ -194,6 +195,7 @@ class _AuthScreenState extends State<AuthScreen> {
       return;
     }
     _showMessage(state.tr('auth.registerNotice'));
+    Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
   }
 
   void _showMessage(String message) {

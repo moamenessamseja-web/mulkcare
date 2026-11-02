@@ -1,27 +1,23 @@
 # جرد التنفيذ — MulkCare Flutter
 
-تُستخدم الحالات بدقة: **منفّذ**، **متحقق عبر CI** (مع تحديد نوع الاختبار)، **مختبر على جهاز**، أو **غير مدعوم/خارج النطاق**. نجاح smoke test لا يعني أن كل تفاعل أو جهاز قد اختُبر.
+الحالات المتاحة: **Verified complete** · **Implemented, not yet verified** · **Partially implemented** · **Not started** · **Blocked** · **Deferred by product decision**. لا تُرفع حالة UI إلى متحقق لمجرد نجاح analyzer أو اختبار بناء شاشة منفردة.
 
-| الوحدة | الحالة بعد run 5 | الدليل والحدود |
+| الوحدة | الحالة الحالية | الدليل/الحد |
 |---|---|---|
-| RTL/LTR والعربية/الإنجليزية | متحقق عبر analyzer وsmoke | 397 مفتاحًا في كل قاموس؛ 266 استدعاء ترجمة حرفيًا بلا مفاتيح ناقصة؛ التواريخ مهيأة للغتين |
-| الدخول والتسجيل | متحقق عبر smoke | `auth_screen.dart`؛ المصادقة تجريبية بلا backend |
-| لوحة الرئيسية | متحقق عبر smoke | `home_screen.dart`؛ بيانات demo |
-| تفاصيل العقار | متحقق عبر smoke | `property_details_screen.dart` |
-| تقرير الفحص | متحقق عبر smoke | `inspection_report_screen.dart`؛ مشاركة PDF غير مهيأة |
-| الخدمات وتتبع الحالة | متحقق عبر smoke واختبارات حالة | `services_screen.dart`؛ إنشاء محلي وانتقالات الطلب محكومة، والمرفقات محلية |
-| الدليل المحلي | متحقق عبر smoke | `local_info_screen.dart`؛ لا بيانات أو خرائط مباشرة |
-| المساعد | متحقق عبر smoke | `assistant_screen.dart`؛ ردود demo محددة مسبقًا، لا AI حي |
-| الاشتراكات | متحقق عبر smoke | `subscriptions_screen.dart`؛ بلا دفع إلكتروني |
-| الملف الشخصي | متحقق عبر smoke | `profile_screen.dart` |
-| الإشعارات | متحقق عبر smoke | `notifications_screen.dart`؛ إشعارات داخل التطبيق |
-| Not Found | متحقق عبر smoke | `not_found_screen.dart` |
-| AppShell والتنقل | متحقق عبر smoke | `navigation/app_shell.dart`؛ خمس وجهات |
-| النماذج والحالة والحفظ | متحقق عبر 6 اختبارات حالة | `data/models.dart`, `data/demo_data.dart`, `state/app_state.dart` |
-| التصميم والأصول | متحقق بالوجود والرسم | Tajawal و8 صور محلية؛ اختبارات الشاشات تتحقق من البناء لا من المطابقة البصرية الكاملة |
-| توقيت القاهرة وDST | متحقق عبر اختبار حالة | `timezone`, `initializeAppTimeZone`, `cairoCalendarDate` |
-| اختبار الشاشات | متحقق عبر CI | 11 widget smoke tests؛ نجحت كلها في run 5 |
-| analyzer وAPK | متحقق عبر CI | [run 5 ناجح](https://github.com/moamenessamseja-web/mulkcare/actions/runs/41397422327)، Flutter 3.47.7، APK artifact موجود |
-| lockfile | متحقق ومرفوع | `pubspec.lock` committed من مخرجات Actions |
-| اختبار تثبيت على جهاز Android | لم يُختبر | لا يوجد جهاز فعلي في دورة العمل |
-| توقيع إنتاجي وGoogle Play | خارج النطاق | لا keystore إنتاجي أو إعداد متجر |
+| بدء التطبيق وتهيئة البيانات | Implemented, not yet verified | APK-5 عُبّئ؛ المالك أبلغ عن شاشة بيضاء بعد الدخول. يلزم اختبار تدفق فعلي عبر CI ثم جهاز. |
+| تسجيل الدخول إلى لوحة المعلومات | Partially implemented | الكود كان يحدّث الحالة دون تبديل مسار Navigator. أضيف انتقال صريح واختبار انحدار؛ CI لم يُشغّل بعد. |
+| التسجيل إلى لوحة المعلومات | Partially implemented | أضيف انتقال صريح واختبار widget؛ النتيجة بانتظار CI. |
+| AppShell والـNavigationBar | Partially implemented | كان Center غير محدود الارتفاع؛ أضيف حد 80 logical px واختبار موضع/ضغط؛ بانتظار CI وجهاز. |
+| لوحة الرئيسية | Implemented, not yet verified | ملف موجود واختبار رسم سابق؛ لا دليل موثوق من رحلة تشغيل على هاتف. |
+| تفاصيل العقار وتقرير الفحص | Implemented, not yet verified | ملفات موجودة واختبارات بناء منفردة؛ الاستخدام من التنقل لم يُؤكد بعد. |
+| الخدمات وتتبع الحالات | Implemented, not yet verified | حالة demo واختبارات منطق؛ اختبار وصول من الشريط مضاف لكنه ينتظر CI. |
+| الدليل المحلي والمساعد | Implemented, not yet verified | ميزات demo بلا بيانات مباشرة أو AI حي؛ يلزم فحص وصولها واستخدامها في التطبيق. |
+| الاشتراكات والملف الشخصي والإشعارات | Implemented, not yet verified | ملفات واختبارات رسم منفردة؛ التفاعلات الطرفية لم تُختبر من جلسة تطبيق كاملة. |
+| Not Found والترجمات RTL/LTR | Implemented, not yet verified | فحوص قاموس ورسم سابقة؛ لا تعتبرها تحققًا من رحلة مستخدم. |
+| النموذج المحلي وبيانات demo وتوقيت القاهرة | Verified complete (unit-level only) | اختبارات الحالة الستة نجحت في run 5؛ لا backend أو دفع أو خدمة AI مباشرة. |
+| اختبارات الشاشات المنفردة | Verified complete (build-only smoke) | 11 اختبارًا سابقًا مرّت، لكنها لم تكشف عيوب مسار التطبيق أو هندسة الشريط. لا تساوي قبول UI. |
+| اختبارات login/navigation الجديدة | Implemented, not yet verified | `test/app_navigation_test.dart` يغطي login، تسجيل حساب، ظهور Home، قياس موضع NavigationBar، والنقر على الخدمات؛ لم يصل بعد إلى CI. |
+| analyzer وبناء APK السابق | Verified complete (CI/build level only) | run 5 أخضر على `fcbaa5d`؛ APK-5 غير موثوق لسلوك التطبيق وفق بلاغ المالك. |
+| التحقق من الإصلاح الجديد | Blocked pending CI | لا Flutter SDK محليًا؛ انتظر Actions على commit الإصلاح. |
+| التثبيت على جهاز المالك | Not started in this correction | مطلوب بعد APK جديد؛ لا يمكن استنتاجه من CI. |
+| توقيع إنتاجي وGoogle Play | Deferred by product decision | لا keystore إنتاجي أو إعداد نشر متجر. |

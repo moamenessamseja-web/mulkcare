@@ -1,7 +1,19 @@
-# نقطة التسليم — الحالة مكتملة
+# نقطة التسليم — إصلاح عطل تجربة التطبيق
 
-اقرأ `.agent/README.md` ثم `IMPLEMENTATION_STATE.md`, `implementation.md`, `VERIFICATION_REPORT.md`, و`TODO.md`.
+**لا تسلّم APK-5 على أنه يعمل.** المالك اختبره وأبلغ أن الدخول وحده ظاهر، وبعده شاشة بيضاء وشريط وجهات في الوسط لا يستجيب. Run 5 الأخضر (على `fcbaa5d`) لم يختبر الدخول أو التنقل؛ اختبارات smoke القديمة رسمت كل شاشة منفردة فقط.
 
-الفرع المستقل هو `feature/flutter-migration-complete`، وآخر commit برمجي `fcbaa5d`. نجح [GitHub Actions run 5](https://github.com/moamenessamseja-web/mulkcare/actions/runs/41397422327): analyzer، 17 اختبارًا، release APK ورفع artifact. artifact اسمه `MulkCare-APK-5`، والنسخة المنزلة توجد في `/home/ubuntu/mulkcare-output/MulkCare-release.apk`؛ SHA-256 والحجم موثقان في سجل الحالة.
+## هذه الجلسة
 
-لا يلزم عمل آخر لإنجاز المطلوب. الاختيار اللاحق إن أراد المالك: اختبار تثبيت على جهاز حقيقي، ثم إعداد keystore إنتاجي قبل أي نشر إلى Google Play. لا تدمج إلى `main` دون طلب، ولا تشغل Flutter محليًا في هذا الإعداد.
+- الفرع: `feature/flutter-migration-complete`.
+- خط أساس الجلسة: `714de92ef4669a3b80fc283da2b00f4508d435c1`.
+- عيبان مرجحان من الكود: شريط `NavigationBar` داخل `Center` غير محدد الارتفاع، والدخول لا ينتقل صراحةً من مسار Auth إلى `/`.
+- الإصلاح واختبارا انحدار لتدفق الدخول/التسجيل والضغط على شريط التنقل أضيفت، لكن **لم تُبْنَ بعد** على GitHub. افحص commit التالي وحالة Actions قبل استخدام أي APK جديد.
+
+## الخطوة التالية
+
+1. افحص `git diff --check` و`dart_sanity.py`.
+2. commit/push الإصلاح على هذا الفرع، ودع push يبدأ workflow أو استخدم `workflow_dispatch` إن لم يبدأ تلقائيًا.
+3. راجع كامل analyzer والاختبارات وسجل الفشل. لا تخفف اختبارًا إذا فشل.
+4. بعد CI الأخضر فقط، نزّل APK الجديد واذكر commit/run بدقة. يلزم المالك لتأكيد التثبيت وسلوك الواجهة على هاتف حقيقي.
+
+لا تدمج إلى `main`، ولا تغيّر `applicationId` أو التوقيع. لا تستخدم APK-5 كدليل على صلاحية التطبيق.

@@ -188,7 +188,8 @@ class _KpiRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = AppState.of(context);
-    return Row(
+    return IntrinsicHeight(
+      child: Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
@@ -216,6 +217,7 @@ class _KpiRow extends StatelessWidget {
           ),
         ),
       ],
+      ),
     );
   }
 }

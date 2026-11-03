@@ -83,5 +83,15 @@ void main() {
       await tester.tap(find.text(state.tr(item.$1)).last);
       await shot(item.$2);
     }
+
+    final nav = tester.state<NavigatorState>(find.byType(Navigator).first);
+    nav.pushNamed('/property/${state.properties.first.id}');
+    await shot('07-property');
+    nav.pushNamed('/inspection/${state.inspectionReports.first.id}');
+    await shot('08-inspection');
+    nav.pushNamed('/notifications');
+    await shot('09-notifications');
+    nav.pushNamed('/subscriptions');
+    await shot('10-subscriptions');
   });
 }

@@ -3,89 +3,94 @@ name: Build MulkCare APK
 on:
   workflow_dispatch:
   push:
-    branches:
-      - feature/flutter-migration-complete
+    branches: [ 'feature/flutter-migration-v3', 'feature/mvp-**' ]
     paths-ignore:
       - '.agent/**'
       - '**/*.md'
+      - 'src/**'
+      - 'public/**'
+      - 'cdn-assets/**'
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
-  group: mulkcare-apk-${{ github.ref }}
+  group: mulkcare-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   build:
-    name: Analyze, test, and build Android APK
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
-      - name: Check out branch
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Install pinned Flutter toolchain
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.47.7'
           channel: stable
           cache: true
 
-      - name: Record toolchain
-        run: flutter --version | tee toolchain.txt
+      - name: Toolchain
+        run: flutter --version 2>&1 | tee toolchain.txt
 
-      - name: Generate Android platform scaffold in CI
-        shell: bash
+      - name: Generate android/ scaffold and guard applicationId
         run: |
           if [ ! -d android ]; then
             flutter create --platforms=android --org com --project-name mullky .
           fi
           rm -f test/widget_test.dart
-          app_gradle=$(find android/app -maxdepth 1 -type f \( -name 'build.gradle' -o -name 'build.gradle.kts' \) | head -n 1)
-          echo "Checking Android application ID in ${app_gradle}"
-          grep -n 'applicationId' "$app_gradle"
-          grep -Eq 'applicationId[ =]*"com\.mullky"' "$app_gradle"
-          manifest=android/app/src/main/AndroidManifest.xml
-          sed -i 's/android:label="mullky"/android:label="MulkCare"/' "$manifest"
+          f=$(ls android/app/build.gradle.kts android/app/build.gradle 2>/dev/null | head -1)
+          grep -n 'applicationId' "$f"
+          grep -Eq 'applicationId[ =]*"com\.mullky"' "$f"
+          M=android/app/src/main/AndroidManifest.xml
+          grep -q 'android.permission.INTERNET' "$M" || sed -i '/<manifest /a\    <uses-permission android:name="android.permission.INTERNET" />' "$M"
+          sed -i 's/android:label="mullky"/android:label="MulkCare"/' "$M"
 
-      - name: Resolve Flutter dependencies
-        run: flutter pub get
+      - run: flutter pub get
 
-      - name: Upload resolved dependency lock
+      - name: Screenshots (evidence only, never blocks)
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          flutter test test_shots/shots_test.dart 2>&1 | tee shots_log.txt
+
+      - name: Publish screenshots
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls build/shots/*.png >/dev/null 2>&1 || { echo "no shots"; tail -n 200 shots_log.txt > shots_log_tail.txt || true; gh release create "shots-fail-${{ github.run_number }}" shots_log_tail.txt --prerelease --target "${{ github.sha }}" --title "Shots FAILED #${{ github.run_number }}" --notes "no screenshots produced" || true; exit 0; }
+          gh release create "shots-${{ github.run_number }}" build/shots/*.png --prerelease --target "${{ github.sha }}" --title "Screenshots #${{ github.run_number }}" --notes "Rendered by flutter test with real Tajawal font at 390x844. Evidence of layout only; NOT a device."
+
+      - name: Analyze
+        run: |
+          set -o pipefail
+          flutter analyze --no-fatal-infos 2>&1 | tee build_log.txt
+
+      - name: Test
+        run: |
+          set -o pipefail
+          flutter test 2>&1 | tee -a build_log.txt
+
+      - name: Build APK
+        run: |
+          set -o pipefail
+          flutter build apk --release --build-number=${{ github.run_number }} 2>&1 | tee -a build_log.txt
+
+      - name: Release APK
         if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: MulkCare-pubspec-lock-${{ github.run_number }}
-          path: pubspec.lock
-          if-no-files-found: error
-          retention-days: 14
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "build-${{ github.run_number }}" build/app/outputs/flutter-apk/app-release.apk --prerelease --target "${{ github.sha }}" --title "MulkCare APK build #${{ github.run_number }}" --notes "Commit ${{ github.sha }} (${{ github.ref_name }}). NOT device-tested. Debug-key signed.
 
-      - name: Static analysis
-        run: flutter analyze --no-fatal-infos
+          $(cat toolchain.txt)"
 
-      - name: Run tests
-        run: flutter test --coverage
-
-      - name: Build release APK
-        run: flutter build apk --release --build-number=${{ github.run_number }}
-
-      - name: Upload APK artifact
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: MulkCare-APK-${{ github.run_number }}
-          path: build/app/outputs/flutter-apk/app-release.apk
-          if-no-files-found: error
-          retention-days: 14
-
-      - name: Upload diagnostic logs on failure
+      - name: Failure log
         if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: MulkCare-build-diagnostics-${{ github.run_number }}
-          path: |
-            toolchain.txt
-            build/**/outputs/**/logs/**
-          if-no-files-found: ignore
-          retention-days: 7
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tail -n 400 build_log.txt > build_log_tail.txt || echo "no log" > build_log_tail.txt
+          gh release create "debug-${{ github.run_number }}" build_log_tail.txt --prerelease --target "${{ github.sha }}" --title "FAILED log #${{ github.run_number }}" --notes "commit ${{ github.sha }}"

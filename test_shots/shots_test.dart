@@ -1,3 +1,4 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member
 // Visual evidence harness (NOT part of `flutter test`): renders screens at phone size
 // with the real Tajawal font and writes PNGs to build/shots/. CI publishes them.
 import 'dart:io';
@@ -18,6 +19,14 @@ Future<void> _loadFont() async {
     loader.addFont(rootBundle.load('assets/fonts/Tajawal-$w.ttf'));
   }
   await loader.load();
+  try {
+    final icons = FontLoader('MaterialIcons')
+      ..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'));
+    await icons.load();
+  } catch (e) {
+    // ignore: avoid_print
+    print('ICONFONT: could not load MaterialIcons: $e');
+  }
 }
 
 void main() {
@@ -39,6 +48,9 @@ void main() {
 
     Future<void> shot(String name) async {
       await tester.pumpAndSettle();
+      final ex = tester.takeException();
+      // ignore: avoid_print
+      if (ex != null) print('EXCEPTION before $name: $ex');
       await tester.runAsync(() async {
         final b = key.currentContext!.findRenderObject() as RenderRepaintBoundary;
         final img = await b.toImage(pixelRatio: 1);

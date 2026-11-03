@@ -69,9 +69,10 @@ jobs:
           flutter analyze --no-fatal-infos 2>&1 | tee build_log.txt
 
       - name: Test
+        timeout-minutes: 12
         run: |
           set -o pipefail
-          flutter test 2>&1 | tee -a build_log.txt
+          flutter test --timeout 60s --reporter expanded 2>&1 | tee -a build_log.txt
 
       - name: Build APK
         run: |
@@ -92,5 +93,5 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          tail -n 400 build_log.txt > build_log_tail.txt || echo "no log" > build_log_tail.txt
+          { grep -n '\[E\]\|Some tests failed\|timed out\|EXCEPTION' build_log.txt | head -40; echo '----- tail -----'; tail -n 300 build_log.txt; } > build_log_tail.txt || echo "no log" > build_log_tail.txt
           gh release create "debug-${{ github.run_number }}" build_log_tail.txt --prerelease --target "${{ github.sha }}" --title "FAILED log #${{ github.run_number }}" --notes "commit ${{ github.sha }}"

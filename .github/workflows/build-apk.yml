@@ -57,11 +57,10 @@ jobs:
 
       - name: Publish screenshots
         if: always()
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          ls build/shots/*.png >/dev/null 2>&1 || { echo "no shots"; tail -n 200 shots_log.txt > shots_log_tail.txt || true; gh release create "shots-fail-${{ github.run_number }}" shots_log_tail.txt --prerelease --target "${{ github.sha }}" --title "Shots FAILED #${{ github.run_number }}" --notes "no screenshots produced" || true; exit 0; }
-          { grep -n 'ICONFONT\|EXCEPTION before' shots_log.txt | head; awk '/EXCEPTION CAUGHT/{f=1} f' shots_log.txt | head -170; } > shots_log_tail.txt || true; gh release create "shots-${{ github.run_number }}" build/shots/*.png shots_log_tail.txt --prerelease --target "${{ github.sha }}" --title "Screenshots #${{ github.run_number }}" --notes "Rendered by flutter test with real Tajawal font at 390x844. Evidence of layout only; NOT a device."
+        run: bash scripts/ci_publish_shots.sh "${{ github.run_number }}" "${{ github.sha }}"
 
       - name: Analyze
         run: |

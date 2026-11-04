@@ -32,28 +32,30 @@ void main() {
     await loader.load();
   });
 
-  for (final screen in _routes) {
-    testWidgets('${screen.name} screen builds without an exception',
-        timeout: const Timeout(Duration(seconds: 60)), (tester) async {
-      tester.view.physicalSize = const Size(390, 844);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
+  // One test, one app, every screen in sequence (the pattern that is proven to run in CI;
+  // creating the app repeatedly in one file hung). Failures name the screen.
+  testWidgets('every screen builds without an exception',
+      timeout: const Timeout(Duration(seconds: 120)), (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
 
-      SharedPreferences.setMockInitialValues({});
-      final state = await AppState.create(await AppTranslations.load());
-      addTearDown(state.dispose);
-      expect(state.signIn(identity: 'owner@mulkcare.demo', password: 'demo123'), isNull);
+    SharedPreferences.setMockInitialValues({});
+    final state = await AppState.create(await AppTranslations.load());
+    addTearDown(state.dispose);
+    expect(state.signIn(identity: 'owner@mulkcare.demo', password: 'demo123'), isNull);
 
-      await tester.pumpWidget(MulkCareApp(state: state));
-      // Capped: fails fast (5s of animation time) if a screen never settles.
-      await tester.pumpAndSettle(const Duration(milliseconds: 100), EnginePhase.sendSemanticsUpdate, const Duration(seconds: 5));
-      if (screen.route != '/') {
-        final nav = tester.state<NavigatorState>(find.byType(Navigator).first);
-        nav.pushNamed(screen.route);
-        await tester.pumpAndSettle(const Duration(milliseconds: 100), EnginePhase.sendSemanticsUpdate, const Duration(seconds: 5));
-      }
-      expect(tester.takeException(), isNull);
-    });
-  }
+    await tester.pumpWidget(MulkCareApp(state: state));
+    Future<void> settle() => tester.pumpAndSettle(const Duration(milliseconds: 100), EnginePhase.sendSemanticsUpdate, const Duration(seconds: 5));
+    await settle();
+    expect(tester.takeException(), isNull, reason: 'home');
+
+    for (final screen in _routes.where((r) => r.route != '/')) {
+      final nav = tester.state<NavigatorState>(find.byType(Navigator).first);
+      nav.pushNamed(screen.route);
+      await settle();
+      expect(tester.takeException(), isNull, reason: screen.name);
+    }
+  });
 }

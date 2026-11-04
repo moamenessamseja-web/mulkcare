@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mulkcare/core/format.dart';
 import 'package:mulkcare/core/i18n.dart';
 import 'package:mulkcare/design/theme.dart';
 import 'package:mulkcare/navigation/app_shell.dart';
-import 'package:mulkcare/screens/assistant_screen.dart';
 import 'package:mulkcare/screens/auth_screen.dart';
 import 'package:mulkcare/screens/home_screen.dart';
 import 'package:mulkcare/screens/inspection_report_screen.dart';
-import 'package:mulkcare/screens/local_info_screen.dart';
 import 'package:mulkcare/screens/not_found_screen.dart';
 import 'package:mulkcare/screens/notifications_screen.dart';
 import 'package:mulkcare/screens/profile_screen.dart';
 import 'package:mulkcare/screens/property_details_screen.dart';
 import 'package:mulkcare/screens/services_screen.dart';
-import 'package:mulkcare/screens/subscriptions_screen.dart';
 import 'package:mulkcare/state/app_state.dart';
 
 const _screens = <({String name, String route, Widget page})>[
@@ -24,9 +22,6 @@ const _screens = <({String name, String route, Widget page})>[
   (name: 'property details', route: '/property/prp_01', page: PropertyDetailsScreen(propertyId: 'prp_01')),
   (name: 'inspection report', route: '/inspection/rep_2041', page: InspectionReportScreen(reportId: 'rep_2041')),
   (name: 'services', route: '/services', page: ServicesScreen()),
-  (name: 'local guide', route: '/local', page: LocalInfoScreen()),
-  (name: 'assistant', route: '/assistant', page: AssistantScreen()),
-  (name: 'subscriptions', route: '/subscriptions', page: SubscriptionsScreen()),
   (name: 'profile', route: '/profile', page: ProfileScreen()),
   (name: 'notifications', route: '/notifications', page: NotificationsScreen()),
   (name: 'not found', route: '/unknown-route', page: NotFoundScreen()),
@@ -35,6 +30,14 @@ const _screens = <({String name, String route, Widget page})>[
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(initializeAppDateFormatting);
+  // Real fonts so text widths match the device (default test font is far wider).
+  setUpAll(() async {
+    final loader = FontLoader('Tajawal');
+    for (final w in ['400', '500', '700']) {
+      loader.addFont(rootBundle.load('assets/fonts/Tajawal-$w.ttf'));
+    }
+    await loader.load();
+  });
 
   for (final screen in _screens) {
     testWidgets('${screen.name} screen builds without an exception', (tester) async {
@@ -44,7 +47,7 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
 
       SharedPreferences.setMockInitialValues({});
-      final state = await AppState.create(AppTranslations(ar: const {}, en: const {}));
+      final state = await AppState.create(await AppTranslations.load());
       expect(state.signIn(identity: 'owner@mulkcare.demo', password: 'demo123'), isNull);
       await tester.pumpWidget(MediaQuery(
         data: MediaQueryData(size: const Size(390, 844)),

@@ -47,14 +47,6 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
     final reports = state.reportsFor(property.id);
     final lastReport = reports.isEmpty ? null : reports.first;
     final invoices = state.invoicesFor(property.id);
-    SubscriptionModel? subscription;
-    for (final item in state.subscriptions) {
-      if (item.propertyId == property.id) {
-        subscription = item;
-        break;
-      }
-    }
-    final plan = subscription == null ? null : state.planById(subscription.planId);
     final visits = state.upcomingVisits.where((item) => item.propertyId == property.id).toList()
       ..sort((a, b) => a.date.compareTo(b.date));
     final nextVisit = visits.isEmpty ? null : visits.first;
@@ -173,61 +165,6 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
                 state.tr('property.factsUnavailable'),
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.onSurfaceMuted),
               ),
-            ],
-          ),
-        ),
-        _PageSection(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SectionHeading(state.tr('property.subscriptionTitle')),
-              if (subscription == null)
-                EmptyState(
-                  title: state.tr('property.noSubscription'),
-                  body: '',
-                  icon: Icons.card_membership_outlined,
-                  action: OutlinedButton.icon(
-                    onPressed: () => Navigator.of(context).pushNamed('/subscriptions'),
-                    icon: const Icon(Icons.open_in_new),
-                    label: Text(state.tr('subscriptions.title')),
-                  ),
-                )
-              else
-                SurfaceCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _DetailRow(
-                        label: state.tr('property.plan'),
-                        value: state.tr(plan?.nameKey ?? 'common.notAvailable'),
-                      ),
-                      const Divider(height: AppSpace.lg),
-                      _DetailRow(
-                        label: state.tr('subscriptions.statusActive'),
-                        value: state.tr(subscription.status == 'active'
-                            ? 'subscriptions.statusActive'
-                            : 'subscriptions.statusPending'),
-                        valueColor: subscription.status == 'active' ? AppColors.success : AppColors.warning,
-                      ),
-                      if (subscription.renewalDate != null) ...[
-                        const Divider(height: AppSpace.lg),
-                        _DetailRow(
-                          label: state.tr('property.renewal'),
-                          value: formatDate(subscription.renewalDate, state.language),
-                          ltrValue: true,
-                        ),
-                      ],
-                      const SizedBox(height: AppSpace.sm),
-                      Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: OutlinedButton(
-                          onPressed: () => Navigator.of(context).pushNamed('/subscriptions'),
-                          child: Text(state.tr('subscriptions.title')),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
             ],
           ),
         ),

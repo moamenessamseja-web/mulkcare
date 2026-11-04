@@ -79,7 +79,7 @@ void main() {
     await tester.pumpAndSettle();
     await shot('02-home');
 
-    for (final item in [('nav.services', '03-services'), ('nav.profile', '04-profile'), ('nav.assistant', '05-assistant'), ('nav.local', '06-local')]) {
+    for (final item in [('nav.services', '03-services'), ('nav.profile', '04-profile')]) {
       await tester.tap(find.text(state.tr(item.$1)).last);
       await shot(item.$2);
     }
@@ -91,7 +91,5 @@ void main() {
     await shot('08-inspection');
     nav.pushNamed('/notifications');
     await shot('09-notifications');
-    nav.pushNamed('/subscriptions');
-    await shot('10-subscriptions');
   });
 }

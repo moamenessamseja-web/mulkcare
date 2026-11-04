@@ -4,17 +4,14 @@ import 'core/format.dart';
 import 'core/i18n.dart';
 import 'design/theme.dart';
 import 'navigation/app_shell.dart';
-import 'screens/assistant_screen.dart';
 import 'screens/auth_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/inspection_report_screen.dart';
-import 'screens/local_info_screen.dart';
 import 'screens/not_found_screen.dart';
 import 'screens/notifications_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/property_details_screen.dart';
 import 'screens/services_screen.dart';
-import 'screens/subscriptions_screen.dart';
 import 'state/app_state.dart';
 
 Future<void> main() async {
@@ -68,12 +65,6 @@ Route<dynamic> _route(AppState state, String routeName) {
     page = InspectionReportScreen(reportId: routeName.split('/').last);
   } else if (routeName == '/services') {
     page = const ServicesScreen();
-  } else if (routeName == '/local') {
-    page = const LocalInfoScreen();
-  } else if (routeName == '/assistant') {
-    page = const AssistantScreen();
-  } else if (routeName == '/subscriptions') {
-    page = const SubscriptionsScreen();
   } else if (routeName == '/profile') {
     page = const ProfileScreen();
   } else if (routeName == '/notifications') {

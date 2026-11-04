@@ -12,16 +12,12 @@ class AppShell extends StatelessWidget {
   static const _destinations = <({String route, String key, IconData icon})>[
     (route: '/', key: 'nav.home', icon: Icons.home_outlined),
     (route: '/services', key: 'nav.services', icon: Icons.handyman_outlined),
-    (route: '/assistant', key: 'nav.assistant', icon: Icons.auto_awesome_outlined),
-    (route: '/local', key: 'nav.local', icon: Icons.explore_outlined),
     (route: '/profile', key: 'nav.profile', icon: Icons.person_outline),
   ];
 
   int get _selectedIndex {
     if (routeName.startsWith('/services')) return 1;
-    if (routeName.startsWith('/assistant')) return 2;
-    if (routeName.startsWith('/local')) return 3;
-    if (routeName.startsWith('/profile') || routeName.startsWith('/subscriptions')) return 4;
+    if (routeName.startsWith('/profile')) return 2;
     return 0;
   }
 
@@ -29,15 +25,12 @@ class AppShell extends StatelessWidget {
     if (routeName.startsWith('/property/')) return 'property.title';
     if (routeName.startsWith('/inspection/')) return 'inspection.title';
     if (routeName.startsWith('/services')) return 'services.title';
-    if (routeName.startsWith('/assistant')) return 'assistant.title';
-    if (routeName.startsWith('/local')) return 'local.title';
-    if (routeName.startsWith('/subscriptions')) return 'subscriptions.title';
     if (routeName.startsWith('/notifications')) return 'notifications.title';
     if (routeName.startsWith('/profile')) return 'profile.title';
     return 'nav.home';
   }
 
-  bool get _isRoot => const {'/', '/services', '/assistant', '/local', '/profile'}.contains(routeName);
+  bool get _isRoot => const {'/', '/services', '/profile'}.contains(routeName);
 
   @override
   Widget build(BuildContext context) {

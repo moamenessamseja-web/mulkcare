@@ -39,15 +39,6 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
-  void _switchTab(bool login) {
-    setState(() {
-      _isLogin = login;
-      _errors.clear();
-      _formError = null;
-      _notice = null;
-    });
-  }
-
   String? _checkIdentity(String value) {
     if (value.trim().isEmpty) return 'auth.errRequired';
     final input = value.trim();
@@ -427,33 +418,6 @@ class _AuthScreenState extends State<AuthScreen> {
             ],
           ),
           const SizedBox(height: AppSpace.lg),
-          Container(
-            padding: const EdgeInsets.all(AppSpace.xxs),
-            decoration: BoxDecoration(
-              color: AppColors.surfaceMuted,
-              borderRadius: BorderRadius.circular(AppRadius.md),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _tabButton(
-                    state: state,
-                    label: state.tr('auth.tabLogin'),
-                    selected: _isLogin,
-                    onPressed: () => _switchTab(true),
-                  ),
-                ),
-                Expanded(
-                  child: _tabButton(
-                    state: state,
-                    label: state.tr('auth.tabRegister'),
-                    selected: !_isLogin,
-                    onPressed: () => _switchTab(false),
-                  ),
-                ),
-              ],
-            ),
-          ),
           const SizedBox(height: AppSpace.md),
           Text(
             state.tr('auth.intro'),
@@ -498,31 +462,6 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _tabButton({
-    required AppState state,
-    required String label,
-    required bool selected,
-    required VoidCallback onPressed,
-  }) {
-    return Semantics(
-      button: true,
-      selected: selected,
-      child: TextButton(
-        onPressed: onPressed,
-        style: TextButton.styleFrom(
-          foregroundColor:
-              selected ? AppColors.primary : AppColors.onSurfaceMuted,
-          backgroundColor: selected ? AppColors.surface : Colors.transparent,
-          minimumSize: const Size(0, AppSpace.touchMin),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.sm),
-          ),
-        ),
-        child: Text(label, textAlign: TextAlign.center),
       ),
     );
   }
@@ -573,25 +512,6 @@ class _AuthScreenState extends State<AuthScreen> {
                   )
                 : Text(state.tr('auth.login')),
           ),
-        ),
-        Align(
-          alignment: AlignmentDirectional.center,
-          child: TextButton(
-            onPressed: () {
-              final message = state.tr('auth.forgotNotice');
-              setState(() => _notice = message);
-              _showMessage(message);
-            },
-            style: TextButton.styleFrom(
-              foregroundColor: AppColors.secondaryStrong,
-              minimumSize: const Size(44, AppSpace.touchMin),
-            ),
-            child: Text(state.tr('auth.forgot')),
-          ),
-        ),
-        OutlinedButton(
-          onPressed: _pending ? null : () => _switchTab(false),
-          child: Text(state.tr('auth.createAccount')),
         ),
       ],
     );

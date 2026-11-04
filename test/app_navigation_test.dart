@@ -58,39 +58,4 @@ void main() {
     expect(find.byType(ServicesScreen), findsOneWidget);
     expect(tester.widget<NavigationBar>(navigation).selectedIndex, 1);
   });
-
-  testWidgets('successful registration also leaves authentication for the app', (tester) async {
-    tester.view.physicalSize = const Size(390, 844);
-    tester.view.devicePixelRatio = 1;
-    addTearDown(tester.view.resetPhysicalSize);
-    addTearDown(tester.view.resetDevicePixelRatio);
-
-    final translations = await AppTranslations.load();
-    final state = await AppState.create(translations);
-    addTearDown(state.dispose);
-
-    await tester.pumpWidget(MulkCareApp(state: state));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text(state.tr('auth.tabRegister')));
-    await tester.pumpAndSettle();
-
-    final fields = find.byType(TextField);
-    expect(fields, findsNWidgets(5));
-    await tester.enterText(fields.at(0), 'Demo Owner');
-    await tester.enterText(fields.at(1), 'demo.owner@example.test');
-    await tester.enterText(fields.at(2), '+201001234567');
-    await tester.enterText(fields.at(3), 'demo123');
-    await tester.enterText(fields.at(4), 'demo123');
-    tester.testTextInput.hide();
-    await tester.pumpAndSettle();
-
-    final registerButton = find.widgetWithText(FilledButton, state.tr('auth.createAccount'));
-    await tester.ensureVisible(registerButton);
-    await tester.tap(registerButton);
-    await tester.pumpAndSettle();
-
-    expect(state.isSignedIn, isTrue);
-    expect(find.byType(AuthScreen), findsNothing);
-    expect(find.byType(HomeScreen), findsOneWidget);
-  });
 }

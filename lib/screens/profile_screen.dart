@@ -149,7 +149,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _groupTile(title: state.tr('profile.groupProperties'), count: properties.length, icon: Icons.home_work_outlined, child: Column(children: [for (final property in properties) ListTile(contentPadding: EdgeInsets.zero, title: Text(state.text(property.name)), subtitle: Text(state.text(property.location)), trailing: const Icon(Icons.chevron_right), onTap: () => Navigator.of(context).pushNamed('/property/${property.id}'))])),
       _groupTile(title: state.tr('profile.groupRequests'), count: requests.length, icon: Icons.handyman_outlined, child: requests.isEmpty ? EmptyState(title: state.tr('profile.noRequests'), body: '') : Column(children: [for (final request in requests.take(5)) ListTile(contentPadding: EdgeInsets.zero, title: Text(state.tr('services.categories.${request.category}')), subtitle: Text('${request.reference} · ${formatDate(request.createdAt, state.language)}', textDirection: TextDirection.ltr), trailing: StatusChip(status: request.status), onTap: () => Navigator.of(context).pushNamed('/services'))])),
       _groupTile(title: state.tr('profile.groupInvoices'), count: invoices.length, icon: Icons.receipt_long_outlined, child: invoices.isEmpty ? EmptyState(title: state.tr('profile.noInvoices'), body: '') : Column(children: [for (final invoice in invoices) ListTile(contentPadding: EdgeInsets.zero, title: Text(state.text(invoice.description)), subtitle: Text(formatDate(invoice.createdAt, state.language)), trailing: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.end, children: [Text(formatMoney(invoice.amount, state.language), textDirection: TextDirection.ltr), Text(state.tr(invoice.status == 'paid' ? 'profile.paid' : 'profile.unpaid'), style: Theme.of(context).textTheme.bodySmall)]))])),
-      ListTile(leading: const Icon(Icons.workspace_premium_outlined, color: AppColors.primary), title: Text(state.tr('profile.groupSubscriptions')), trailing: const Icon(Icons.chevron_right), onTap: () => Navigator.of(context).pushNamed('/subscriptions')),
       const SizedBox(height: AppSpace.lg),
       SectionHeading(state.tr('profile.groupHelp')),
       SurfaceCard(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -157,7 +156,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         const SizedBox(height: AppSpace.xs),
         Text(state.tr('profile.helpBody')),
         const SizedBox(height: AppSpace.sm),
-        OutlinedButton.icon(onPressed: () => Navigator.of(context).pushNamed('/assistant'), icon: const Icon(Icons.auto_awesome_outlined), label: Text(state.tr('profile.openAssistant'))),
         const Divider(height: AppSpace.xl),
         Text(state.tr('profile.groupPrivacy'), style: Theme.of(context).textTheme.titleSmall),
         const SizedBox(height: AppSpace.xs),

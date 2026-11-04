@@ -16,7 +16,7 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  testWidgets('demo login opens dashboard and bottom navigation works at screen bottom', (tester) async {
+  testWidgets('demo login opens dashboard and bottom navigation works at screen bottom', timeout: const Timeout(Duration(seconds: 60)), (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);

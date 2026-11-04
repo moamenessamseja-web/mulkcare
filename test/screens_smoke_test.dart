@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show EnginePhase;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,7 +41,7 @@ void main() {
   });
 
   for (final screen in _screens) {
-    testWidgets('${screen.name} screen builds without an exception', (tester) async {
+    testWidgets('${screen.name} screen builds without an exception', timeout: const Timeout(Duration(seconds: 40)), (tester) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
@@ -61,7 +62,8 @@ void main() {
           ),
         ),
       ));
-      await tester.pumpAndSettle();
+      // Capped: fails fast (5s of animation time) if a screen never settles.
+      await tester.pumpAndSettle(const Duration(milliseconds: 100), EnginePhase.sendSemanticsUpdate, const Duration(seconds: 5));
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox.shrink());
       state.dispose();

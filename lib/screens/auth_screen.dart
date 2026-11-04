@@ -20,7 +20,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final _registerPassword = TextEditingController();
   final _confirmPassword = TextEditingController();
 
-  bool _isLogin = true;
+  final bool _isLogin = true;
   bool _showPassword = false;
   bool _pending = false;
   String? _formError;

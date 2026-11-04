@@ -431,10 +431,9 @@ class _FactCard extends StatelessWidget {
 }
 
 class _DetailRow extends StatelessWidget {
-  const _DetailRow({required this.label, required this.value, this.valueColor, this.ltrValue = false});
+  const _DetailRow({required this.label, required this.value, this.ltrValue = false});
   final String label;
   final String value;
-  final Color? valueColor;
   final bool ltrValue;
 
   @override
@@ -452,7 +451,7 @@ class _DetailRow extends StatelessWidget {
               value,
               textDirection: ltrValue ? TextDirection.ltr : null,
               textAlign: TextAlign.end,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: valueColor, fontWeight: FontWeight.w500),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
             ),
           ),
         ],

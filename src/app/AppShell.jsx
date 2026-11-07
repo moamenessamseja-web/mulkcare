@@ -1,13 +1,11 @@
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { Bell, ChevronLeft, ChevronRight, Compass, Home, Sparkles, User, Wrench } from 'lucide-react';
+import { Bell, ChevronLeft, ChevronRight, Compass, Home, User, Wrench } from 'lucide-react';
 import { useI18n } from '../core/i18n';
 import { useStore } from './store';
-import { DemoBanner } from '../core/components/StateBlock';
 
 const NAV_ITEMS = [
   { to: '/', key: 'nav.home', icon: Home, end: true },
   { to: '/services', key: 'nav.services', icon: Wrench },
-  { to: '/assistant', key: 'nav.assistant', icon: Sparkles },
   { to: '/local', key: 'nav.local', icon: Compass },
   { to: '/profile', key: 'nav.profile', icon: User },
 ];
@@ -17,7 +15,6 @@ const TITLE_ROUTES = [
   { match: '/property/', key: 'property.title' },
   { match: '/inspection/', key: 'inspection.title' },
   { match: '/services', key: 'services.title' },
-  { match: '/assistant', key: 'assistant.title' },
   { match: '/local', key: 'local.title' },
   { match: '/subscriptions', key: 'subscriptions.title' },
   { match: '/notifications', key: 'notifications.title' },
@@ -32,7 +29,7 @@ function titleKeyFor(pathname) {
   return prefixed ? prefixed.key : 'nav.home';
 }
 
-const ROOT_PATHS = ['/', '/services', '/assistant', '/local', '/profile'];
+const ROOT_PATHS = ['/', '/services', '/local', '/profile'];
 
 export default function AppShell() {
   const { t, isRTL } = useI18n();
@@ -75,7 +72,6 @@ export default function AppShell() {
         </header>
 
         <main className="app-content" id="main">
-          <DemoBanner />
           <Outlet />
         </main>
 

@@ -1,12 +1,10 @@
 import { useMemo, useState } from 'react';
 import {
-  Bus,
   Map as MapIcon,
   Pill,
   Search,
   ShoppingCart,
   Send,
-  Stethoscope,
   Wrench,
   X,
 } from 'lucide-react';
@@ -18,10 +16,8 @@ import { useToast } from '../core/components/Toast';
 
 const CATEGORY_ICONS = {
   pharmacy: Pill,
-  clinic: Stethoscope,
   supermarket: ShoppingCart,
   essentials: Wrench,
-  transport: Bus,
   places: MapIcon,
 };
 

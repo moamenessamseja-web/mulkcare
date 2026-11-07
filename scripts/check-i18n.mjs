@@ -57,12 +57,12 @@ const DYNAMIC = {
   'propertyStatus.*': ['occupied', 'vacant', 'maintenance'],
   'inspectionResult.*': ['ok', 'followup', 'repair'],
   'services.categories.*': ['general', 'plumbing', 'electrical', 'hvac', 'cleaning', 'pest', 'other'],
-  'local.categories.*': ['pharmacy', 'clinic', 'supermarket', 'essentials', 'transport', 'places'],
+  'local.categories.*': ['pharmacy', 'supermarket', 'essentials', 'places'],
   'local.categoryNotes.*': ['pharmacy', 'clinic', 'supermarket', 'essentials', 'transport', 'places'],
   'profile.notifications.*': ['visits', 'maintenance', 'invoices', 'marketing'],
   'inspection.categories.*': ['doorsWindows', 'plumbing', 'electrical', 'hvac', 'leaks', 'cleanliness'],
   'subscriptions.plans.*': ['basic.name', 'basic.frequency', 'basic.limits', 'basic.excluded', 'premium.name', 'premium.frequency', 'premium.limits', 'premium.excluded'],
-  'assistant.*demo_': ['ac', 'cleaning', 'report', 'prep', 'invoice', 'plan', 'default'],
+  
 };
 
 for (const [family, members] of Object.entries(DYNAMIC)) {

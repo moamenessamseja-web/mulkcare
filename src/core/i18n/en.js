@@ -37,8 +37,6 @@ export default {
     required: 'Required',
     optional: 'Optional',
     retryLater: 'Please try again later.',
-    demo: 'Demo',
-    demoBanner: 'Demo build — everything shown is sample data and is not connected to a live server.',
     currency: 'EGP',
     perMonth: 'per month',
     notAvailable: 'Not available',
@@ -50,7 +48,6 @@ export default {
   nav: {
     home: 'Home',
     services: 'Services',
-    assistant: 'Assistant',
     local: 'Local guide',
     profile: 'Account',
     notifications: 'Notifications',
@@ -313,65 +310,16 @@ export default {
     countLabel: 'categories',
     categories: {
       pharmacy: 'Pharmacies',
-      clinic: 'Clinics',
       supermarket: 'Supermarkets',
       essentials: 'Essential services',
-      transport: 'Local transport',
       places: 'Useful places',
     },
     categoryNotes: {
       pharmacy: 'Fast access to pharmacies near your property when you need one.',
-      clinic: 'Nearby clinics and medical centres, with home-visit coordination.',
       supermarket: 'Groceries and home supplies delivered before you arrive.',
       essentials: 'Electrician, plumber, carpenter, laundry and everyday services.',
-      transport: 'Airport pickups and transport around Hurghada.',
       places: 'Restaurants, landmarks and useful services during your stay.',
     },
-  },
-
-  assistant: {
-    title: 'AI assistant',
-    subtitle: 'Ask anything about your property or about MulkCare services.',
-    demoBadge: 'Demo mode',
-    demoNotice:
-      'No AI provider is connected in this build. Replies are pre-written to explain how the app works, and no booking, price or confirmation is ever generated.',
-    inputLabel: 'Your message',
-    inputPh: 'Type your question…',
-    send: 'Send',
-    attach: 'Attach',
-    attachNotice: 'Attachments are not configured in this build.',
-    typing: 'The assistant is typing…',
-    failed: 'The message could not be sent. Nothing was sent.',
-    retry: 'Send again',
-    suggestedTitle: 'Suggested questions',
-    emptyTitle: 'Start a conversation',
-    emptyBody: 'Pick a suggested question or type your own.',
-    newChat: 'New chat',
-    clearChat: 'Clear conversation',
-    historyTitle: 'Conversation history',
-    clearConfirmTitle: 'Clear conversation',
-    clearConfirmBody: 'Every message in this session will be deleted.',
-    cleared: 'Conversation cleared.',
-    you: 'You',
-    assistantName: 'MulkCare assistant',
-    q1: 'How do I report an air-conditioning problem?',
-    q2: 'How can I prepare my property before arrival?',
-    q3: 'How do I view my latest inspection report?',
-    q4: 'How can I request a cleaning service?',
-    demo_ac:
-      'Open Services → choose the Air conditioning category → select the property → describe the problem → pick a date and time → submit. The request appears in the tracking list as Pending, and when an estimate arrives it moves to Awaiting approval. Work never starts before you approve.',
-    demo_cleaning:
-      'In Services choose the Cleaning category, select the property and describe what you need (a full clean or pre-arrival preparation), then submit. You can also tap “Request cleaning” on the dashboard to reach the same form.',
-    demo_report:
-      'From the dashboard, the “Latest inspection summaries” section opens the report. You can also open Property details → Inspection reports. The report shows the overall condition, per-category checklist results, inspector notes, photos, and recommendations kept separate from the findings.',
-    demo_prep:
-      'Pre-arrival preparation is part of the Premium plan: the home is cleaned and set up before you arrive. Subscriptions compares both plans, and Services is where you send a preparation request with your arrival date.',
-    demo_invoice:
-      'Every invoice and expense appears under Account → Invoices, with the line description, amount and payment status. The invoices here are sample data, not real charges.',
-    demo_plan:
-      'Subscriptions lists the Basic and Premium plans with included services, inspection frequency and service limits. The prices shown are proposed test prices, and choosing a plan only sends a request to the team — there is no online payment in this build.',
-    demo_default:
-      'I am a demo assistant in this build and I am not connected to any AI provider, so I cannot book, quote or confirm anything. I can explain how the app works: requesting a service, tracking a request, reading an inspection report, preparing your home, invoices, or choosing a plan. Try a word like “air conditioning”, “cleaning” or “report”.',
   },
 
   subscriptions: {
@@ -451,9 +399,6 @@ export default {
     notificationsNote: 'Preferences are saved to the current session only.',
     privacyBody:
       'We keep as little data as possible: account details, property details and service history. In this demo build everything stays local and nothing is sent to a server.',
-    helpTitle: 'Need help?',
-    helpBody: 'Open the AI assistant for quick questions, or send a service request and the team will reply.',
-    openAssistant: 'Open the AI assistant',
     requestCount: 'requests',
     invoiceCount: 'invoices',
     paid: 'Paid',

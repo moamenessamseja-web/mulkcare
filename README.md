@@ -7,7 +7,6 @@ Owners follow their properties, request services, read photo inspection reports,
 review expenses and talk to the MulkCare team.
 
 > **This build runs on sample data.** Every screen that renders data shows a
-> persistent demo banner. Nothing here is connected to a live server, and the app
 > never presents sample data as real. See [Data & backend](#data--backend).
 
 ---
@@ -22,7 +21,6 @@ review expenses and talk to the MulkCare team.
 | 4 | `/inspection/:reportId` | تقرير الفحص — condition score, 6-category checklist, notes, photos, recommendations |
 | 5 | `/services` | الخدمات والصيانة — request form + request tracking with status workflow |
 | 6 | `/local` | المواصلات والدليل المحلي — Hurghada guide with search and honest no-source state |
-| 7 | `/assistant` | المساعد الذكي — assistant thread, suggested questions, demo badge |
 | 8 | `/subscriptions` | الباقات والاشتراكات — Basic / Premium plans, no payment UI |
 | 9 | `/profile` | الملف الشخصي — edit profile, language, notification prefs, invoices, logout |
 
@@ -52,7 +50,6 @@ src/
     format.js     currency / date / time / relative-time formatters
   data/
     mockData.js         the sample data set (clearly labelled)
-    repositories/       the only data seam: demo adapter (default) + remote adapter contract
     services/           authService, aiService
   pages/          one file per screen
   styles.css      design tokens (from DESIGN.md) + component styles
@@ -89,12 +86,9 @@ node .render-check.cjs   # 32/32 routes rendered without error
 
 It is a render check only — it says nothing about layout, colour or interaction.
 
-### Demo sign-in
 
-The auth service runs in **demo mode**: no authentication server is connected.
 
 ```
-email:    owner@mulkcare.demo
 password: any 6+ characters
 ```
 
@@ -128,11 +122,8 @@ in `src/styles.css`, so nothing in the components hard-codes a colour or size.
 |---|---|
 | Screens, routing, navigation, RTL/LTR | working |
 | Form validation, error states, loading skeletons, empty states | working |
-| Request state machine (7 statuses, legal transitions only) | working, enforced in `repository.transitions` |
 | Profile editing, notification prefs, language switching | working (session-scoped) |
-| Sign-in / registration | **demo mode** — local session only |
 | Persistence | browser `localStorage` (session + data snapshot) |
-| AI assistant | **demo mode** — pre-written answers, no provider |
 | Image upload | file picker previews locally; **nothing is uploaded** |
 | Payments | none, by design |
 
@@ -141,9 +132,6 @@ in `src/styles.css`, so nothing in the components hard-codes a colour or size.
 Copy `.env.example` to `.env.local` and set:
 
 ```bash
-VITE_DATA_SOURCE=demo   # or: remote
-VITE_AUTH_MODE=demo     # or: remote
-VITE_AI_MODE=demo       # or: remote
 VITE_API_BASE_URL=      # required only for remote modes
 ```
 
@@ -160,7 +148,6 @@ PATCH  /api/v1/service-requests/:id
 POST   /api/v1/subscriptions
 PATCH  /api/v1/notifications/:id
 PATCH  /api/v1/notifications/read-all
-POST   /api/v1/assistant/messages
 ```
 
 ### Entities
@@ -175,7 +162,6 @@ Supabase (Auth + Postgres + Storage + RLS) fits this architecture directly.
 
 1. `npm i @supabase/supabase-js`, add `SUPABASE_URL` and `SUPABASE_ANON_KEY` as
    **public** env values.
-2. Implement a third adapter next to `createDemoAdapter` / `createRemoteAdapter`
    and select it with `VITE_DATA_SOURCE=supabase`.
 3. Create the tables above with `owner_id uuid references auth.users` on every
    owned row.
@@ -196,7 +182,6 @@ Supabase (Auth + Postgres + Storage + RLS) fits this architecture directly.
 
 - A backend for real accounts, data and image storage
 - A maps/places provider for `/local` (today it shows an honest "no live source" state)
-- An AI provider behind a server endpoint for `/assistant`
 - PDF export for inspection reports (the share action currently reports that it is not configured)
 - Push notifications (alert preferences are stored but nothing is delivered yet)
 
@@ -206,7 +191,6 @@ Supabase (Auth + Postgres + Storage + RLS) fits this architecture directly.
 
 `src/data/mockData.js` holds 3 properties, 6 service requests across every
 status, 2 inspection reports, 3 subscriptions, 3 invoices, 4 notifications and
-2 upcoming visits. Dates are generated relative to "now" so the demo never looks
 stale. All imagery is generated concept imagery — not photographs of real
 properties, staff or clients. Plan prices (EGP 999 / 1,999) are **proposed test
 prices** and are labelled as such in the UI.

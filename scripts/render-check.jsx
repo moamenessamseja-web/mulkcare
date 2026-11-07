@@ -22,7 +22,6 @@ import PropertyDetailsPage from '../src/pages/PropertyDetailsPage';
 import InspectionReportPage from '../src/pages/InspectionReportPage';
 import ServicesPage from '../src/pages/ServicesPage';
 import LocalInfoPage from '../src/pages/LocalInfoPage';
-import AssistantPage from '../src/pages/AssistantPage';
 import SubscriptionsPage from '../src/pages/SubscriptionsPage';
 import ProfilePage from '../src/pages/ProfilePage';
 import NotificationsPage from '../src/pages/NotificationsPage';
@@ -57,8 +56,6 @@ const SIGNED_IN_ROUTES = [
   ['/inspection/rep_2028', InspectionReportPage],
   ['/services', ServicesPage],
   ['/services?property=prp_01&category=hvac', ServicesPage],
-  ['/local', LocalInfoPage],
-  ['/assistant', AssistantPage],
   ['/subscriptions', SubscriptionsPage],
   ['/profile', ProfilePage],
   ['/notifications', NotificationsPage],

@@ -1,0 +1,23 @@
+# Mission: MulkCare MVP Feature-Removal & Flutter Migration
+
+Repository: https://github.com/moamenessamseja-web/mulkcare
+Branch: feat/mulkcare-flutter-mvp
+
+## Objective
+Remove four feature areas from the existing React/Vite app and migrate to Flutter:
+1. AI assistant (AssistantPage, aiService, /assistant route, nav item, i18n keys, VITE_AI_MODE)
+2. Local clinic directory (clinic category in LocalInfoPage, i18n keys)
+3. Transit directory (transport category in LocalInfoPage, i18n keys)
+4. Visible demo content (DemoBanner component, demo badges, demo wording)
+
+## Fixed Rules
+- Work on existing repo, preserve relevant functionality
+- Keep localStorage persistence intact (store.jsx unchanged)
+- Stop when checks are green; do not merge
+- Document all decisions in .agent/implementation.md
+
+## Deliverables
+- Modified web files (React) with features removed
+- Flutter app structure (pubspec.yaml, lib/, android/)
+- GitHub Actions workflow for Flutter CI + APK
+- .agent documentation (implementation.md, Handoff.md, stute.md, mission)

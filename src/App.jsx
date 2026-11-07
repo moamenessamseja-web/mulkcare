@@ -10,7 +10,6 @@ import PropertyDetailsPage from './pages/PropertyDetailsPage';
 import InspectionReportPage from './pages/InspectionReportPage';
 import ServicesPage from './pages/ServicesPage';
 import LocalInfoPage from './pages/LocalInfoPage';
-import AssistantPage from './pages/AssistantPage';
 import SubscriptionsPage from './pages/SubscriptionsPage';
 import ProfilePage from './pages/ProfilePage';
 import NotificationsPage from './pages/NotificationsPage';
@@ -72,7 +71,6 @@ export default function App() {
           <Route path="/inspection/:reportId" element={<InspectionReportPage />} />
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/local" element={<LocalInfoPage />} />
-          <Route path="/assistant" element={<AssistantPage />} />
           <Route path="/subscriptions" element={<SubscriptionsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/notifications" element={<NotificationsPage />} />

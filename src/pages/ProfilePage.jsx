@@ -7,10 +7,8 @@ import {
   Fuel,
   House,
   Languages,
-  LifeBuoy,
   LogOut,
   ShieldCheck,
-  Sparkles,
   Wrench,
 } from 'lucide-react';
 import { useI18n } from '../core/i18n';
@@ -337,17 +335,6 @@ export default function ProfilePage() {
         <div className="section-head">
           <h3>{t('profile.groupHelp')}</h3>
         </div>
-        <div className="card">
-          <p className="card__title">
-            <LifeBuoy size={18} aria-hidden="true" /> {t('profile.helpTitle')}
-          </p>
-          <p className="prose">{t('profile.helpBody')}</p>
-          <Link className="btn btn--secondary btn--sm" to="/assistant">
-            <Sparkles size={18} aria-hidden="true" />
-            {t('profile.openAssistant')}
-          </Link>
-        </div>
-
         <div className="card">
           <p className="card__title">
             <ShieldCheck size={18} aria-hidden="true" /> {t('profile.groupPrivacy')}
